@@ -1,0 +1,390 @@
+.company-directory {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.company-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.company-subtitle {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.company-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.search-bar {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+.search-bar:focus {
+  border-color: #007bff;
+}
+
+.company-controls button {
+  padding: 8px 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.company-controls button:hover {
+  background-color: #0056b3;
+}
+
+.filters-panel {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.filters-panel select,
+.filters-panel input {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 140px;
+}
+
+.filters-panel select:focus,
+.filters-panel input:focus {
+  border-color: #007bff;
+}
+
+.company-table {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.company-table-header,
+.company-table-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 2fr 1fr;
+  align-items: center;
+  padding: 10px 15px;
+}
+
+.company-table-header {
+  background-color: #f1f3f5;
+  font-weight: 600;
+}
+
+.company-table-row:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.company-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.company-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+}
+
+.company-name {
+  font-weight: 500;
+}
+
+.company-id {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.company-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.company-link:hover {
+  text-decoration: underline;
+}
+
+.view-details-btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.view-details-btn:hover {
+  background-color: #218838;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.pagination-controls button {
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination-controls button:hover {
+  background-color: #f1f1f1;
+}
+
+.pagination-controls button:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+.modal {
+  width: 800px;
+  max-width: 95vw;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.modal-actions button {
+  margin-left: 10px;
+  font-size: 1.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-body {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.modal-body p {
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
+.modal-body strong {
+  color: #333;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.save-btn {
+  background: #4cafef;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background: #3b9ddb;
+}
+
+a {
+  color: #4cafef;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.modal-body {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 24px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 15px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.modal-view-header {
+  grid-column: 1 / -1;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px;
+}
+
+.modal-company-name {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: white;
+}
+
+.status-active {
+  background-color: #28a745;
+}
+
+.status-inactive {
+  background-color: #6c757d;
+}
+
+.modal-view-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 24px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.detail-value {
+  font-size: 1rem;
+  color: #111;
+}
+
+.description-text {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.modal-body {
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f1f1f1;
+}
