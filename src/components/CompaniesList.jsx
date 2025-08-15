@@ -45,7 +45,7 @@ function CompaniesList() {
     fetchCompanies(page);
   }, [page, industry, isActive, minAnnualRevenue, maxAnnualRevenue]);
 
-  const fetchCompanies = async (currentPage) => {
+  const fetchCompanies = async (currentPage, searchOverride) => {
     try {
       setLoading(true);
       const data = await getCompanies({
@@ -55,7 +55,7 @@ function CompaniesList() {
         isActive: isActive || undefined,
         minAnnualRevenue: minAnnualRevenue || undefined,
         maxAnnualRevenue: maxAnnualRevenue || undefined,
-        searchTerm: searchTerm || undefined,
+        searchTerm: searchOverride || searchTerm || undefined, // <-- here
       });
       setCompanies(data.data || []);
       setTotalPages(data.pages || 1);
@@ -89,12 +89,11 @@ function CompaniesList() {
       try {
         const res = await searchCompanies({ q: value });
         setSuggestions(res.data || []);
-        console.log(res.data);
         setShowSuggestions(true);
       } catch {
         setSuggestions([]);
       }
-    }, 400); // 400ms debounce
+    }, 400);
   };
   const openModal = (mode, company = null) => {
     setModalMode(mode);
@@ -153,8 +152,38 @@ function CompaniesList() {
   const handleSuggestionClick = (name) => {
     setSearchTerm(name);
     setShowSuggestions(false);
-    fetchCompanies(1); // Fetch filtered results
+    fetchCompanies(1, name);
   };
+  const handleClearFilters = async () => {
+    // Reset filters
+    setIndustry("");
+    setIsActive("");
+    setMinAnnualRevenue("");
+    setMaxAnnualRevenue("");
+    setTempIndustry("");
+    setTempIsActive("");
+    setTempMinAnnualRevenue("");
+    setTempMaxAnnualRevenue("");
+    setSearchTerm("");
+    setSuggestions([]);
+    setShowSuggestions(false);
+    setPage(1);
+
+    try {
+      setLoading(true);
+      const data = await getCompanies({
+        page: 1,
+        limit: 10,
+      });
+      setCompanies(data.data || []);
+      setTotalPages(data.pages || 1);
+    } catch (err) {
+      setError("Failed to fetch companies");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="company-directory">
       <h2 className="company-title">Company Directory</h2>
@@ -176,7 +205,9 @@ function CompaniesList() {
               {suggestions.map((item) => (
                 <li
                   key={item._id}
-                  onClick={() => handleSuggestionClick(item.name)}
+                  onClick={() => {
+                    handleSuggestionClick(item.name), console.log(item.name);
+                  }}
                 >
                   {item.name}
                 </li>
@@ -184,7 +215,7 @@ function CompaniesList() {
             </ul>
           )}
         </div>
-
+        <button onClick={handleClearFilters}>clear filters</button>
         <button onClick={() => setShowFilters(!showFilters)}>
           {showFilters ? "Hide Filters" : "Show Filters"}
         </button>
