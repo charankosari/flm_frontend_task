@@ -262,14 +262,23 @@ function CompaniesList() {
               </h3>
               {modalMode === "view" && (
                 <div className="modal-actions">
-                  <button onClick={() => openModal("edit", selectedCompany)}>
+                  <button
+                    className="icon-btn edit-btn"
+                    onClick={() => openModal("edit", selectedCompany)}
+                    title="Edit Company"
+                  >
                     <MdOutlineModeEdit />
                   </button>
-                  <button onClick={handleDelete}>
+                  <button
+                    className="icon-btn delete-btn"
+                    onClick={handleDelete}
+                    title="Delete Company"
+                  >
                     <MdDeleteOutline />
                   </button>
                 </div>
               )}
+
               <button onClick={() => setShowModal(false)}>❌</button>
             </div>
 
