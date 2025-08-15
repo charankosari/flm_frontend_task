@@ -7,6 +7,7 @@ import {
 } from "../requests/apirequests";
 import "../styles/CompaniesList.css";
 import { MdOutlineModeEdit, MdDeleteOutline } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
 function CompaniesList() {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -279,7 +280,9 @@ function CompaniesList() {
                 </div>
               )}
 
-              <button onClick={() => setShowModal(false)}>❌</button>
+              <button className="close-btn" onClick={() => setShowModal(false)}>
+                <RxCross2 size={22} color="red" />
+              </button>
             </div>
 
             <div className="modal-body">
