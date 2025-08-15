@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   getCompanies,
   createCompany,
   updateCompany,
   deleteCompany,
+  searchCompanies,
 } from "../requests/apirequests";
 import "../styles/CompaniesList.css";
 import { MdOutlineModeEdit, MdDeleteOutline } from "react-icons/md";
@@ -15,6 +16,8 @@ function CompaniesList() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [industry, setIndustry] = useState("");
   const [isActive, setIsActive] = useState("");
@@ -37,7 +40,7 @@ function CompaniesList() {
     description: "",
     email: "",
   });
-
+  const debounceTimer = useRef(null);
   useEffect(() => {
     fetchCompanies(page);
   }, [page, industry, isActive, minAnnualRevenue, maxAnnualRevenue]);
@@ -52,6 +55,7 @@ function CompaniesList() {
         isActive: isActive || undefined,
         minAnnualRevenue: minAnnualRevenue || undefined,
         maxAnnualRevenue: maxAnnualRevenue || undefined,
+        searchTerm: searchTerm || undefined,
       });
       setCompanies(data.data || []);
       setTotalPages(data.pages || 1);
@@ -69,7 +73,29 @@ function CompaniesList() {
   const handleNextPage = () => {
     if (page < totalPages) setPage(page + 1);
   };
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
 
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+
+    if (value.trim() === "") {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    debounceTimer.current = setTimeout(async () => {
+      try {
+        const res = await searchCompanies({ q: value });
+        setSuggestions(res.data || []);
+        console.log(res.data);
+        setShowSuggestions(true);
+      } catch {
+        setSuggestions([]);
+      }
+    }, 400); // 400ms debounce
+  };
   const openModal = (mode, company = null) => {
     setModalMode(mode);
     setSelectedCompany(company);
@@ -124,7 +150,11 @@ function CompaniesList() {
       }
     }
   };
-
+  const handleSuggestionClick = (name) => {
+    setSearchTerm(name);
+    setShowSuggestions(false);
+    fetchCompanies(1); // Fetch filtered results
+  };
   return (
     <div className="company-directory">
       <h2 className="company-title">Company Directory</h2>
@@ -132,13 +162,29 @@ function CompaniesList() {
         Complete list of all registered companies
       </p>
       <div className="company-controls">
-        <input
-          type="text"
-          placeholder="Search by name..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-bar"
-        />
+        <div className="search-wrapper">
+          <input
+            type="text"
+            placeholder="Search by name..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+            className="search-bar"
+          />
+          {showSuggestions && (
+            <ul className="suggestions-dropdown">
+              {suggestions.map((item) => (
+                <li
+                  key={item._id}
+                  onClick={() => handleSuggestionClick(item.name)}
+                >
+                  {item.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <button onClick={() => setShowFilters(!showFilters)}>
           {showFilters ? "Hide Filters" : "Show Filters"}
         </button>
@@ -345,7 +391,7 @@ function CompaniesList() {
                     <div className="detail-item">
                       <span className="detail-label">Annual Revenue</span>
                       <span className="detail-value">
-                        ${selectedCompany.annualRevenue?.toLocaleString()}
+                        ₹{selectedCompany.annualRevenue}
                       </span>
                     </div>
                     <div className="detail-item full-width">
