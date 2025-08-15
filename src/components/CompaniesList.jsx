@@ -14,16 +14,16 @@ function CompaniesList() {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
-  // Filters
   const [searchTerm, setSearchTerm] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const [industry, setIndustry] = useState("");
   const [isActive, setIsActive] = useState("");
   const [minAnnualRevenue, setMinAnnualRevenue] = useState("");
   const [maxAnnualRevenue, setMaxAnnualRevenue] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
-
-  // Modal state
+  const [tempIndustry, setTempIndustry] = useState("");
+  const [tempIsActive, setTempIsActive] = useState("");
+  const [tempMinAnnualRevenue, setTempMinAnnualRevenue] = useState("");
+  const [tempMaxAnnualRevenue, setTempMaxAnnualRevenue] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState("view"); // "view", "edit", "create"
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -48,7 +48,6 @@ function CompaniesList() {
       const data = await getCompanies({
         page: currentPage,
         limit: 10,
-        search: searchTerm || undefined,
         industry: industry || undefined,
         isActive: isActive || undefined,
         minAnnualRevenue: minAnnualRevenue || undefined,
@@ -86,7 +85,6 @@ function CompaniesList() {
         isActive: company.isActive,
       });
     } else {
-      // Create mode - empty form
       setFormData({
         name: "",
         industry: "",
@@ -133,8 +131,6 @@ function CompaniesList() {
       <p className="company-subtitle">
         Complete list of all registered companies
       </p>
-
-      {/* Top Controls */}
       <div className="company-controls">
         <input
           type="text"
@@ -151,42 +147,59 @@ function CompaniesList() {
         </button>
       </div>
 
-      {/* Filters */}
       {showFilters && (
         <div className="filters-panel">
           <select
-            value={industry}
-            onChange={(e) => setIndustry(e.target.value)}
+            value={tempIndustry}
+            onChange={(e) => setTempIndustry(e.target.value)}
           >
             <option value="">All Industries</option>
             <option value="Technology">Technology</option>
             <option value="Finance">Finance</option>
             <option value="Healthcare">Healthcare</option>
+            <option value="Education">Education</option>
+            <option value="Manufacturing">Manufacturing</option>
+            <option value="Retail">Retail</option>
+            <option value="other">other</option>
           </select>
+
           <select
-            value={isActive}
-            onChange={(e) => setIsActive(e.target.value)}
+            value={tempIsActive}
+            onChange={(e) => setTempIsActive(e.target.value)}
           >
             <option value="">All Status</option>
             <option value="true">Active</option>
             <option value="false">Inactive</option>
           </select>
+
           <input
             type="number"
             placeholder="Min Revenue"
-            value={minAnnualRevenue}
-            onChange={(e) => setMinAnnualRevenue(e.target.value)}
+            value={tempMinAnnualRevenue}
+            onChange={(e) => setTempMinAnnualRevenue(e.target.value)}
           />
           <input
             type="number"
             placeholder="Max Revenue"
-            value={maxAnnualRevenue}
-            onChange={(e) => setMaxAnnualRevenue(e.target.value)}
+            value={tempMaxAnnualRevenue}
+            onChange={(e) => setTempMaxAnnualRevenue(e.target.value)}
           />
+
+          <button
+            className="apply-filters-btn"
+            onClick={() => {
+              setIndustry(tempIndustry);
+              setIsActive(tempIsActive);
+              setMinAnnualRevenue(tempMinAnnualRevenue);
+              setMaxAnnualRevenue(tempMaxAnnualRevenue);
+              setPage(1);
+            }}
+          >
+            Apply Filters
+          </button>
         </div>
       )}
 
-      {/* Table */}
       <div className="company-table">
         <div className="company-table-header">
           <span>COMPANY</span>
@@ -238,7 +251,6 @@ function CompaniesList() {
         )}
       </div>
 
-      {/* Pagination */}
       <div className="pagination-controls">
         <button onClick={handlePrevPage} disabled={page === 1}>
           Previous
@@ -251,7 +263,6 @@ function CompaniesList() {
         </button>
       </div>
 
-      {/* Modal */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -388,7 +399,7 @@ function CompaniesList() {
                       <option value="Education">Education</option>
                       <option value="Manufacturing">Manufacturing</option>
                       <option value="Retail">Retail</option>
-                      <option value="Other">Other</option>
+                      <option value="other">other</option>
                     </select>
                   </div>
 
